@@ -1,0 +1,67 @@
+nav .navbar-brand
+{
+    /* size for brand */
+    font-size: xx-large;
+}
+
+nav
+{
+    background-color: forestgreen;
+    color: goldenrod;
+}
+
+#login, #logged-in {
+    display: none;
+}
+
+
+body
+{
+    margin-bottom: 60px;
+}
+.li
+{
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+}
+.col-md-6
+{
+   font-weight: bold;
+}
+.col-md-3
+{
+    font-style: italic;
+}
+.button
+{
+    background-color: dodgerblue;
+    border: none;
+    color: white;
+    padding: 15px 32px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+}
+.container-full
+{
+    margin-left:200px;
+}
+
+.footer
+{
+    position: absolute;
+    width: 100%;
+    bottom: 0;
+    height: 60px;
+    line-height: 60px;
+}
+
+html
+{
+    min-height: 100%;
+    position: relative;
+}
+
+/* taken from :  https://www.w3schools.com/css/css3_buttons.asp */

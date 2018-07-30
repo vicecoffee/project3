@@ -1,0 +1,32 @@
+{% extends "layout.html" %}
+
+  {% block title %}
+      Menu
+  {% endblock %}
+
+  {% block body %}
+      <h1>Menu</h1>
+      <uL>
+          {% for item in menu_items %}
+            <li>
+                <div class="row">
+                    <div class="col-md-6">{{item.category}}: {{item.name}}</div>
+                    <div class="col-md-3">{{item.sm_price}}<div class="input-group">
+                        <input type="number" class="form-control" name= "quantity" placeholder="quantity" type="number" min="1"/>
+                        <span class="input-group-btn">
+                  	        <button class="btn btn-default" name="menu-add-button"  type="submit">Add</button>
+                        </span>
+                    </div>
+                    </div>
+                    <div class="col-md-3">{{item.lg_price}}<div class="input-group">
+                        <input type="number" class="form-control" name= "quantity" placeholder="quantity" type="number" min="1"/>
+                        <span class="input-group-btn">
+                  	        <button class="btn btn-default" name="menu-add-button"  type="submit">Add</button>
+                    </span>
+                    </div>
+                    </div>
+                </div>
+            </li>
+          {% endfor %}
+      </ul>
+  {% endblock %}
