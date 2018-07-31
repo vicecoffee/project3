@@ -1,0 +1,38 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    Registration
+{% endblock %}
+
+{% block body %}
+  <h1>User Registration</h1>
+
+  {# Adapted from django docs https://docs.djangoproject.com/en/2.0/topics/auth/default/#module-django.contrib.auth.forms #}
+  {% if form.non_field_errors %}
+  {% for error in form.non_field_errors %}
+    <div class="alert alert-danger">{{error}}</div>
+  {% endfor %}
+  {% endif %}
+
+
+    {# From https://docs.djangoproject.com/en/2.0/topics/forms/ #}
+    {# From https://getbootstrap.com/docs/4.0/components/forms/ #}
+  <form class="needs-validation" novalidate method="post" action="{% url 'register' %}">
+      {% csrf_token %}
+
+      {% for field in form %}
+          <div class="form-group row">
+            <div class="col-sm-2 col-form-label">{{ field.label_tag }}</div>
+            <div class="col-sm-5">
+                {{ field }}
+                <div class="invalid-feedback">Please provide a valid {{field.name}}.</div>
+            </div>
+          </div>
+          {% if field.help_text %}
+              <p class="small">{{ field.help_text|safe }}</p>
+          {% endif %}
+      {% endfor %}
+
+      <button class="btn btn-primary" type="submit">Register</button>
+  </form>
+{% endblock %}

@@ -1,0 +1,38 @@
+{% extends "layout.html" %}
+
+  {% block title %}
+      View Orders
+  {% endblock %}
+
+  {% block body %}
+  <h1>View Orders</h1>
+  <table class="table">
+      <thead>
+        <tr>
+            <th>Order ID</th>
+            <th>User Name</th>
+            <th>Description</th>
+            <th>Total</th>
+        </tr>
+      </thead>
+  {% for order in orders %}
+      <tr class="table-primary">
+          <th>{{order.id}}</th>
+          <td>{{order.user.username}}</td>
+          <td>{{order.order_item_set.count}} line item(s), {{order.total_quantity}} food item(s)</td>
+          <td>{{order.total}}</td>
+      </tr>
+      <tbody>
+      {% for item in order.order_item_set.all %}
+       <tr>
+           <td></td>
+           <td></td>
+           <td>{{item.description}} @ {{item.unit_price}} each</td>
+           <td>{{item.total}}</td>
+       </tr>
+      {% endfor %}
+      </tbody>
+  {% endfor %}
+  </table>
+  </ul>
+  {% endblock %}

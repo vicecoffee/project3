@@ -1,0 +1,12 @@
+<form method="POST" action="/menu/">
+   {% csrf_token %}
+    <label class="control-label">{{size}}</label>
+    <div class="input-group mb-3">
+            <div class="input-group-addon">${{price}}</div>
+            <div class="input-group-addon">&times;</div>
+         <input type="number" class="form-control" name= "quantity" placeholder="0" required min="1"/>
+         <span class="input-group-btn">
+              <button class="btn btn-menu" type="submit">Add</button>
+         </span>
+    </div>
+</form>

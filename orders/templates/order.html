@@ -1,0 +1,25 @@
+{% extends "layout.html" %}
+
+  {% block title %}
+      Confirm Order
+  {% endblock %}
+
+  {% block body %}
+  <h1>Review and Confirm Order</h1>
+  {% if cart is None %}
+      <p>Sorry, you currently don't have any items on your order.</p>
+      <p>You can begin creating an order <a href="/menu/">here</a>.</p>
+  {% else %}
+      {% for item in cart.cart_item_set.all %}
+        <div>
+            {{item.description}} @ {{item.unit_price}}: {{item.total}}
+        </div>
+      {% endfor %}
+      <hr>
+      Order Total: {{cart.total}}
+      <form method="POST" action="/order/">
+          {% csrf_token %}
+          <button type="submit" class="btn btn-primary">Place Order</button>
+      </form>
+  {% endif %}
+  {% endblock %}
