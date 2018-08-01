@@ -10,16 +10,46 @@
       <p>Sorry, you currently don't have any items on your order.</p>
       <p>You can begin creating an order <a href="/menu/">here</a>.</p>
   {% else %}
-      {% for item in cart.cart_item_set.all %}
-        <div>
-            {{item.description}} @ {{item.unit_price}}: {{item.total}}
-        </div>
+    <table class="table">
+      <thead>
+        <tr>
+          <th>Item</th>
+          <th>Quantity</th>
+          <th></th>
+          <th>Price ea.</th>
+          <th>Notes</th>
+          <th>Line Total</th>
+        </tr>
+      </thead>
+      {% for line in cart.order_item_set.all %}
+      <tr>
+        <th>{{line.item}}</th>
+        <td>{{line.quantity}}</td>
+        <td>&times;</td>
+        <td>${{line.unit_price}}</td>
+        <td>
+           <ul>
+            {% for topping in line.toppings.all %}
+              <li>{{topping}}</li>
+            {% endfor %}
+            </ul>
+            <ul>
+            {% for extra in line.extras.all %}
+              <li>{{extra.name}} - ${{extra.price}} (&times;{{line.quantity}})</li>
+            {% endfor %}
+            </ul>
+        </td>
+        <th>
+          ${{line.total}}
+        </th>
+      </tr>
       {% endfor %}
-      <hr>
-      Order Total: {{cart.total}}
-      <form method="POST" action="/order/">
-          {% csrf_token %}
-          <button type="submit" class="btn btn-primary">Place Order</button>
-      </form>
+    </table>
+    <hr>
+    <p class="lead d-flex justify-content-between"><strong>Order Total:</strong> <strong>${{cart.total}}</strong></p>
+    <form method="POST" action="/order/">
+        {% csrf_token %}
+        <button type="submit" class="btn btn-outline-primary float-right">Place Order</button>
+    </form>
   {% endif %}
   {% endblock %}

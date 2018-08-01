@@ -121,6 +121,18 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 
-# from https://developer.mozilla.org/en-US/docs/Learn/Server-side/Django/Authentication
+# From https://developer.mozilla.org/en-US/docs/Learn/Server-side/Django/Authentication
 # Redirect to home URL after login (Default redirects to /accounts/profile/)
 LOGIN_REDIRECT_URL = '/'
+
+# From https://docs.djangoproject.com/en/2.0/ref/contrib/messages/
+MESSAGE_STORAGE = 'django.contrib.messages.storage.session.SessionStorage'
+
+# Change the message tags for errors to work with bootstrap danger class
+from django.contrib.messages import constants as message_constants
+MESSAGE_TAGS = {
+    message_constants.INFO: "info",
+    message_constants.ERROR: "danger",
+    message_constants.SUCCESS: "success",
+    message_constants.WARNING: "warning"
+}

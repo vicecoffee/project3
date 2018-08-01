@@ -5,36 +5,17 @@
   {% endblock %}
 
   {% block body %}
-      <h1>View our Menu <small>| Build an order</small></h1>
-      <table class="table">
+        <h1>View our Menu <small>| Build an order</small></h1>
 
-        {% regroup menu_items by category as items_by_category %}
+        {% regroup menu_items by item.category as items_by_category %}
 
-      {% for category in items_by_category %}
-          <tbody>
-          <tr class="table-primary"><th>{{category.grouper}}</th></tr>
-          {% for item in category.list %}
-          <tr>
-              <td>
-            <div class="row justify-content-between"> {# justify-content-between to make single size items move to end of row #}
-                <div class="col-md-4">{{item.name}}</div>
-                    {% if item.sm_price == item.lg_price %}
-                        <div class="col-md-4">
-                            {% include "add_menu_item.html" with price=item.sm_price %}
-                        </div>
-                    {% else %}
-                        <div class="col-md-4">
-                          {% include "add_menu_item.html" with size="small" price=item.sm_price %}
-                       </div>
-                       <div class="col-md-4">
-                           {% include "add_menu_item.html" with size="large" price=item.lg_price %}
-                       </div>
-                    {% endif %}
-            </div>
-            </td>
-          </tr>
-          </tbody>
+        {% for category in items_by_category %}
+        <div class="menu-category {{category.grouper}} p-3 mt-3">
+          <h4 class="text-dark">{{category.grouper}}</h4>
+          {% for item_and_form in category.list %}
+              {% include "menu_item.html" with item=item_and_form.item form=item_and_form.form %}
           {% endfor %}
-    {% endfor %}
-      </table>
+        </div>
+        {% endfor %}
+
   {% endblock %}

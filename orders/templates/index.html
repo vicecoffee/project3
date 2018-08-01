@@ -4,5 +4,11 @@
   {% endblock %}
 
   {% block body %}
-
+    <h1 class="display-1">Pinocchio's Pizza & Subs</h1>
+    {% if user.is_authenticated %}
+    <p class="lead">Welcome back!  Please <a href="/menu/">browse our menu</a> or <a href="/order/">review an existing order</a>.</p>
+    {% else %}
+    <p class="lead">Welcome to Pinnochio's Pizza & Subs.  If you would like to place an order, please <a href="/accounts/login">log in</a>
+    or <a href="/accounts/register/">register</a> as a customer.</p>
+    {% endif %}
   {% endblock %}

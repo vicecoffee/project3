@@ -1,0 +1,54 @@
+<div class="border bg-light m-3 p-3">
+    <h5 class="d-flex justify-content-between">
+        <span>{{item.name}}</span>
+        <span>
+            ${{item.sm_price}}
+            {% if item.sm_price != item.lg_price %}
+                (small)
+                ${{item.lg_price}} (large)
+            {% endif %}
+        </span>
+    </h5>
+    <form method="POST" action="/menu/{{item.id}}/" novalidate class="row needs-validation">
+       {% csrf_token %}
+       {{form.id}}
+        <!--<label class="control-label">{{form.size}}</label>-->
+        <!--<div class="input-group mb-3">-->
+        <!--        <div class="input-group-addon">${{form.price}}</div>-->
+        <!--        <div class="input-group-addon">&times;</div>-->
+        <!--     <input type="number" class="form-control" name= "quantity" placeholder="0" required min="1"/>-->
+        <!--     <span class="input-group-btn">-->
+        <!--          <button class="btn btn-menu" type="submit">Add</button>-->
+        <!--     </span>-->
+        <!--</div>-->
+        <div class="col-sm-9">
+            {% for topping in form.toppings %}
+            <span class="mr-1">
+                {{topping}}
+            </span>
+            {% endfor %}
+            {% for extra in form.extras %}
+            <span class="mr-2">
+            {{extra}}
+            </span>
+            {% endfor %}
+        </div>
+        <div class="col-sm-3 align-self-end">
+                <div class="d-flex justify-content-around">
+                    {% for size_option in form.size %}
+                        {{size_option}}
+                    {% endfor %}
+                </div>
+                <div class="input-group">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text">Qty:</span>
+                    </div>
+                    <input type="number" class="form-control" id="{{form.quantity.auto_id}}" name="{{form.quantity.html_name}}" placeholder="0" required min="1"/>
+                    <div class="invalid-tooltip">Please select a quantity.</div>
+                     <div class="input-group-append">
+                          <button class="btn btn-menu" type="submit">+ Add</button>
+                     </div>
+                </div>
+        </div>
+    </form>
+</div>

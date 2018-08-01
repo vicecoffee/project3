@@ -1,70 +1,91 @@
 from django.http import HttpResponse, HttpResponseRedirect
+from django.contrib import messages
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
 from django.contrib.admin.views.decorators import staff_member_required
 from django.core.exceptions import ObjectDoesNotExist
 from django.shortcuts import render
-from orders.models import Menu_item, Order, Cart, Order_item
-from .forms import RegisterForm
+from orders.models import Menu_item, Order, Order_item
+from .forms import RegisterForm, AddItemForm
 from django import forms
-from json import dumps
+
+# Had to add prefix when putting form in dict with item to make sure the html worked
+menu_items = [{ "item": item, "form": AddItemForm(item_model = item, prefix=item.id)} for item in Menu_item.objects.all()]
 
 # Create your views here.
 def index(request):
     return render(request, "index.html")
 
 @login_required
-def menu(request):
+def menu(request, id = 0):
     if request.method == "POST":
-        item_id = 5
-        is_large = False
-        quantity = 3
-
-        item = Menu_item.objects.get(id = item_id)
+        item = Menu_item.objects.get(id = id)
 
         if item is None:
-            return HttpResponse("invalid item")
+            messages.error(
+                    request, "Something went wrong.  Please double-check and try again."
+                    )
 
-        cart, created = Cart.objects.get_or_create(user = request.user)
+            return HttpResponseRedirect("/menu")
 
-        line = cart.cart_item_set.create(is_large = is_large, quantity = quantity, item = item)
+        form = AddItemForm(request.POST, item_model = item, prefix = item.id)
+
+        if form.is_valid():
+            size = form.cleaned_data.get("size")
+            quantity = form.cleaned_data.get("quantity")
+            extras = form.cleaned_data.get("extras")
+            toppings = form.cleaned_data.get("toppings")
+
+            cart, created = Order.objects.get_or_create(user = request.user, status = Order.SHOPPING)
+
+            line = cart.order_item_set.create(
+                size = size if size is not None else Order_item.NA,
+                quantity = quantity,
+                item = item
+                )
+            if extras is not None:
+                line.extras.set(extras)
+
+            if toppings is not None:
+                line.toppings.set(toppings)
+
+            line.save()
+
+            messages.success(
+                request, "{} {} x{} added to your cart.".format(line.item.name, line.item.category, line.quantity)
+                )
+        else:
+            for error in form.non_field_errors():
+                messages.error(request, error)
+            if [field.errors for field in form]:
+                messages.error(
+                    request, "Something went wrong.  Please double-check and try again."
+                    )
 
         return HttpResponseRedirect("/menu")
 
-    menu_items = Menu_item.objects.all()
     return render(request, "menu.html",{"menu_items": menu_items})
 
 # Must be logged in to make an order
 @login_required
 def order(request):
     try:
-        cart = Cart.objects.get(user = request.user)
+        cart = Order.objects.get(user = request.user, status = Order.SHOPPING)
     except ObjectDoesNotExist:
         return render(request, "order.html", {"cart": None})
 
     if request.method == "POST":
-        order = Order.objects.create(user = request.user)
-
-        order_lines = [Order_item(
-            order = order,
-            quantity = cart_item.quantity,
-            is_large = cart_item.is_large,
-            item = cart_item.item
-            ) for cart_item in cart.cart_item_set.all()]
-
-        print([line.description for line in order_lines])
-
-        order.order_item_set.bulk_create(order_lines)
-        Cart.objects.filter(id = cart.id).delete()
-        return render(request, "ordered.html", {"order_id": order.id})
+        cart.status = Order.PLACED
+        cart.save()
+        return render(request, "ordered.html", {"order_id": cart.id})
 
     return render(request, "order.html", {"cart": cart})
 
 # Only staff should get to the list of orders
 @staff_member_required
 def orders(request):
-    orders = Order.objects.all()
+    orders = Order.objects.exclude(status = Order.SHOPPING)
 
     return render(request, "admin/orders.html", {"orders": orders})
 

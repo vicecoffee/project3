@@ -4,9 +4,14 @@ nav .navbar-brand
     font-size: xx-large;
 }
 
-nav
+nav.navbar
 {
     background-color: forestgreen;
+    color: white;
+}
+
+nav.navbar a
+{
     color: goldenrod;
 }
 
@@ -25,18 +30,17 @@ li
     margin: 0;
     padding: 0;
 }
-.col-md-6
+
+.btn:not(:disabled):not(.disabled),
+input[type=checkbox]:not(:disabled):not(.disabed),
+input[type=radio]:not(:disabled):not(.disabed)
 {
-   font-weight: bold;
-}
-.col-md-3
-{
-    font-style: italic;
+    cursor: pointer;
 }
 
 .btn.btn-menu
 {
-    background-color: dodgerblue;
+    background-color: goldenrod;
     border: none;
     color: white;
 /*    padding: 15px 32px; */
@@ -57,6 +61,36 @@ li
     bottom: 0;
     height: 60px;
     line-height: 60px;
+}
+
+.menu-category.Subs
+{
+    background-color: lavender;
+}
+
+.menu-category.Pasta
+{
+    background-color: aliceblue;
+}
+
+.menu-category.Regular.Pizza
+{
+    background-color: #d4edda;
+}
+
+.menu-category.Sicilian.Pizza
+{
+    background-color: mistyrose;
+}
+
+.menu-category.Dinner.Platters
+{
+    background-color: lavenderblush;
+}
+
+.menu-category.Salads
+{
+    background-color: #fdfd96;
 }
 
 html

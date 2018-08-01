@@ -4,6 +4,7 @@ from . import views
 urlpatterns = [
     path("", views.index, name="index"),
     path("menu/", views.menu, name="menu"),
+    path("menu/<int:id>/", views.menu, name="menu"),
     path("order/", views.order, name="order"),
     path("admin/view_orders/", views.orders, name="admin order list"),
     path("accounts/", include("django.contrib.auth.urls")),
